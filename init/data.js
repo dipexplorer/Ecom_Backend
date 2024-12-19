@@ -35,30 +35,30 @@ const sampleProducts = [
       price: 299.99,
       stock: 5
     },
-    {
-      name: "Travel Tune",
-      description: "Foldable headphones with long battery life and compact design.",
-      price: 89.99,
-      stock: 20
-    },
-    {
-      name: "Runner's Edge",
-      description: "Sweat-proof sports headphones with a secure fit.",
-      price: 59.99,
-      stock: 30
-    },
-    {
-      name: "Gaming Blast X",
-      description: "Gaming headphones with surround sound and LED lights.",
-      price: 99.99,
-      stock: 40
-    },
-    {
-      name: "Retro Vibe 80s",
-      description: "Vintage-style headphones with modern sound technology.",
-      price: 69.99,
-      stock: 35
-    }
+    // {
+    //   name: "Travel Tune",
+    //   description: "Foldable headphones with long battery life and compact design.",
+    //   price: 89.99,
+    //   stock: 20
+    // },
+    // {
+    //   name: "Runner's Edge",
+    //   description: "Sweat-proof sports headphones with a secure fit.",
+    //   price: 59.99,
+    //   stock: 30
+    // },
+    // {
+    //   name: "Gaming Blast X",
+    //   description: "Gaming headphones with surround sound and LED lights.",
+    //   price: 99.99,
+    //   stock: 40
+    // },
+    // {
+    //   name: "Retro Vibe 80s",
+    //   description: "Vintage-style headphones with modern sound technology.",
+    //   price: 69.99,
+    //   stock: 35
+    // }
   ];
   
   module.exports = {data : sampleProducts};

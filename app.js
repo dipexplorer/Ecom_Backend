@@ -3,6 +3,18 @@ const app = express();
 const mongoose=require("mongoose");
 const Product = require("./models/products.js");
 
+//for ejs rendering
+const path = require("path");
+
+app.set("view engine", "ejs");
+// Set up template engine for EJS
+app.set("views", path.join(__dirname,"views"));
+
+// for static files
+
+app.use(express.static(path.join(__dirname, "public")));
+
+
 const MONGO_DB_URL = "mongodb://127.0.0.1:27017/e_commerce";
 
 main()
@@ -22,24 +34,36 @@ app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
-// User Schema
-app.get("/testSchema",async (req, res) => {
+app.get("/products", async (req, res) => {
     try{
-        let sampleProduct = new Product({
-            name: "Sample Product",
-            description: "This is a sample product for testing purposes.",
-            price: 99.99,
-            stock: 100,
-            image_url: "ass"
-        });
-        await sampleProduct.save();
-        console.log("Sample Product saved");
-        res.send("Sample Product created successfully");
+        const allProducts = await Product.find({});
+        // res.json(allProducts);
+        console.log(allProducts);
+        res.render("products/index.ejs", {allProducts});
     }
     catch(err){
-        res.send( err.message );
+        res.send(err.message);
     }
-});
+})
+
+// // User Schema
+// app.get("/testSchema",async (req, res) => {
+//     try{
+//         let sampleProduct = new Product({
+//             name: "Sample Product",
+//             description: "This is a sample product for testing purposes.",
+//             price: 99.99,
+//             stock: 100,
+//             image_url: "ass"
+//         });
+//         await sampleProduct.save();
+//         console.log("Sample Product saved");
+//         res.send("Sample Product created successfully");
+//     }
+//     catch(err){
+//         res.send( err.message );
+//     }
+// });
 
 
 // Start server

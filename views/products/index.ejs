@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEasy</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #faf9f7;
+            color: #2c2c2c;
+        }
+
+        h1, h2, h3, p {
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: #1a1a1a;
+            color: #fdf9f3;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            color: #fdf9f3;
+            margin-left: 1.5rem;
+            font-weight: 500;
+        }
+
+        .navbar a:hover {
+            color: #d4af37;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+            color: #fdf9f3;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background: #d4af37;
+            color: #1a1a1a;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background: #c09630;
+            color: #fdf9f3;
+        }
+
+        /* Product Listing */
+        .product-listing {
+            padding: 3rem 1.5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .product-listing h2 {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-size: 2.5rem;
+            color: #2c2c2c;
+            letter-spacing: 1px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Product Card */
+        .product-card {
+            display: flex;
+            align-items: stretch;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card img {
+            width: 130px;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .product-card-content {
+            padding: 1.1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: #2c2c2c;
+        }
+
+        .product-card-content p {
+            margin: 0.5rem 0;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .btn-add-to-cart {
+            background: #000;
+            color: #fff;
+            padding: 0.8rem;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-add-to-cart:hover {
+            background: #fff;
+            color: #000;
+            border: 1px solid #000;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+            color: #fdf9f3;
+            font-size: 1rem;
+            margin-top: 3rem;
+        }
+    </style>
+
+    <header class="navbar">
+        <h1 class="logo">ShopEasy</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Products</a>
+            <a href="#" id="cart-link">Cart (0)</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to ShopEasy</h1>
+            <p>Your one-stop destination for amazing products and deals.</p>
+            <a href="#products" class="btn-primary">Shop Now</a>
+        </div>
+    </section>
+
+    <main id="products" class="product-listing">
+        <h2>Featured Products</h2>
+        <div class="product-grid">
+            <% for (let product of allProducts) { %>
+                <div class="product-card">
+                    <img src="<%= product.image_url %>" alt="<%= product.name %>">
+                    <div class="product-card-content">
+                        <h3><a href="/products/<%= product._id %>"><%= product.name %></a></h3>
+                        <p>Price: $<%= product.price %></p>
+                        <p>Stock: <%= product.stock %> left</p>
+                        <button class="btn-add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 ShopEasy. Crafted with ❤️.</p>
+    </footer>
+
+    <script>
+        let cartCount = 0;
+
+        document.querySelectorAll('.btn-add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                cartCount++;
+                document.getElementById('cart-link').textContent = `Cart (${cartCount})`;
+                alert('Item added to cart!');
+            });
+        });
+    </script>
+</body>
+
+</html>
