@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEasy | Product Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <style>
+        body {
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #faf9f7;
+            color: #2c2c2c;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: #1a1a1a;
+            color: #fdf9f3;
+        }
+
+        .navbar h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .navbar nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .navbar a {
+            color: #fdf9f3;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #d4af37;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin: 1rem 2rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #d4af37;
+        }
+
+        /* Product Details Section */
+        .product-details-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .product-image {
+            flex: 1 1 40%;
+            max-width: 500px;
+        }
+
+        .product-image img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-info {
+            flex: 1 1 50%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-info h1 {
+            font-size: 2.5rem;
+            color: #2c2c2c;
+            margin-bottom: 1rem;
+        }
+
+        .product-info .price {
+            font-size: 1.8rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+        }
+
+        .product-info .stock {
+            font-size: 1.1rem;
+            color: #2c2c2c;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-info .description {
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #d4af37;
+            color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            background: #c09630;
+            color: #fdf9f3;
+        }
+
+        .btn-secondary {
+            background: #2c2c2c;
+            color: #fdf9f3;
+        }
+
+        .btn-secondary:hover {
+            background: #1a1a1a;
+        }
+
+        /* Reviews and Similar Products */
+        .reviews-section,
+        .similar-products {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .reviews-section h2,
+        .similar-products h2 {
+            font-size: 2rem;
+            color: #2c2c2c;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+            color: #fdf9f3;
+        }
+    </style>
+
+    <header class="navbar">
+        <h1>ShopEasy</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/products">Products</a>
+            <a href="/cart">Cart</a>
+        </nav>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="/products">Home</a> &gt; <a href="/products">Products</a> &gt; Product Details
+    </div>
+
+    <main>
+        <section class="product-details-container">
+            <div class="product-image">
+                <img src="<%= product.image_url %>" alt="<%= product.name %>">
+            </div>
+            <div class="product-info">
+                <h1><%= product.name %></h1>
+                <p class="price">$<%= product.price %></p>
+                <p class="stock"><%= product.stock > 0 ? 'In Stock' : 'Out of Stock' %></p>
+                <p class="description"><%= product.description %></p>
+                <div class="btn-container">
+                    <button class="btn-primary">Add to Cart</button>
+                    <button class="btn-secondary">Buy Now</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="reviews-section">
+            <h2>Customer Reviews</h2>
+            <p>No reviews yet. Be the first to review this product!</p>
+        </section>
+
+        <section class="similar-products">
+            <h2>Similar Products</h2>
+            <p>Coming soon...</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2024 ShopEasy. Crafted with ❤️.</p>
+    </footer>
+</body>
+
+</html>

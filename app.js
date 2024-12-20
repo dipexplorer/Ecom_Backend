@@ -10,6 +10,9 @@ app.set("view engine", "ejs");
 // Set up template engine for EJS
 app.set("views", path.join(__dirname,"views"));
 
+// for body parsing means that body is parsed as JSON instead of a string
+app.use(express.urlencoded({extended:true}));
+
 // for static files
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -38,13 +41,24 @@ app.get("/products", async (req, res) => {
     try{
         const allProducts = await Product.find({});
         // res.json(allProducts);
-        console.log(allProducts);
+        // console.log(allProducts);
         res.render("products/index.ejs", {allProducts});
     }
     catch(err){
         res.send(err.message);
     }
-})
+});
+
+app.get("/products/:id", async (req, res) => {
+    try{
+        const product = await Product.findById(req.params.id);
+        if(!product) return res.status(404).send("Product not found");
+        res.render("products/show.ejs", {product});
+    }
+    catch(err){
+        res.send(err.message);
+    }
+});
 
 // // User Schema
 // app.get("/testSchema",async (req, res) => {
