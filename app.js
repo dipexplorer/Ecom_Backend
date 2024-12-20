@@ -17,6 +17,10 @@ app.use(express.urlencoded({extended:true}));
 
 app.use(express.static(path.join(__dirname, "public")));
 
+// update product
+const methodOverride = require("method-override");
+
+app.use(methodOverride("_method"));
 
 const MONGO_DB_URL = "mongodb://127.0.0.1:27017/e_commerce";
 
@@ -54,6 +58,79 @@ app.get("/products/:id", async (req, res) => {
         const product = await Product.findById(req.params.id);
         if(!product) return res.status(404).send("Product not found");
         res.render("products/show.ejs", {product});
+    }
+    catch(err){
+        res.send(err.message);
+    }
+});
+
+//admin
+
+app.get("/adminDashboard",async (req, res)=>{
+    const allProducts = await Product.find({});
+    res.render("products/adminDashboard.ejs",{product : allProducts});
+});
+
+//add product
+app.get("/adminDashboard/addProduct", (req, res) => {
+    res.render("products/new.ejs");
+});
+
+app.get("/adminDashboard/:id", async (req, res)=>{
+    try{
+        const product = await Product.findById(req.params.id);
+        if(!product) return res.status(404).send("Product not found");
+        res.render("products/admin_view.ejs", {product});
+    }
+    catch(err){
+        res.send(err.message);
+    }
+});
+
+
+
+app.post("/adminDashboard/addProduct", async (req, res) => {
+    try{
+        let product = req.body.product;
+        // console.log(product);
+        const newProduct = new Product(product);
+        newProduct.save();
+        res.redirect("/adminDashboard");
+    }
+    catch(err){
+        res.send(err.message);
+    }
+});
+
+app.get("/adminDashboard/:id/update", async (req, res) => {
+    try{
+        const product = await Product.findById(req.params.id);
+        if(!product) return res.status(404).send("Product not found");
+        res.render("products/update.ejs", {product});
+    }
+    catch(err){
+        res.send(err.message);
+    }
+});
+
+// update the product
+
+app.put("/adminDashboard/:id/update", async (req, res) => {
+    try{
+        let product = req.body.product;
+        await Product.findByIdAndUpdate(req.params.id, product);
+        res.redirect(`/adminDashboard/${req.params.id}`);
+    }
+    catch(err){
+        res.send(err.message);
+    }
+});
+
+//delete product
+app.delete("/adminDashboard/:id", async (req, res) => {
+    try{
+        await Product.findByIdAndDelete(req.params.id);
+        res.redirect("/adminDashboard");
     }
     catch(err){
         res.send(err.message);
