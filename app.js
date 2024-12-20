@@ -22,6 +22,9 @@ const methodOverride = require("method-override");
 
 app.use(methodOverride("_method"));
 
+const ejsMate = require("ejs-Mate");
+app.engine('ejs',ejsMate);
+
 const MONGO_DB_URL = "mongodb://127.0.0.1:27017/e_commerce";
 
 main()
