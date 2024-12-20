@@ -14,7 +14,6 @@ app.set("views", path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
 
 // for static files
-
 app.use(express.static(path.join(__dirname, "public")));
 
 // update product

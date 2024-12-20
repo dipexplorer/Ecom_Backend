@@ -1,55 +1,6 @@
 <% layout("/layouts/admin_boiler") -%>
 
 <body>
-    <style>
-        .form-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 50px auto;
-        }
-
-        .form-title {
-            text-align: center;
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: #555;
-        }
-
-        .form-control {
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            padding: 12px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        /* Image Preview */
-        .preview-image {
-            max-width: 250px;
-            height: auto;
-            margin: 10px 0;
-            display: block;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .placeholder-image {
-            max-width: 250px;
-            height: auto;
-            margin: 10px 0;
-            display: block;
-            opacity: 0.5;
-        }
-    </style>
     <div class="form-container">
         <h1 class="form-title">Update Product</h1>
         <form method="POST" action="/adminDashboard/<%= product._id %>/update?_method=PUT">
