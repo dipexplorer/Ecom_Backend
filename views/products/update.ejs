@@ -3,18 +3,24 @@
 <body>
     <div class="form-container">
         <h1 class="form-title">Update Product</h1>
-        <form method="POST" action="/adminDashboard/<%= product._id %>/update?_method=PUT">
+        <form method="POST" action="/adminDashboard/<%= product._id %>/update?_method=PUT" class="needs-validation" novalidate>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="productName">Product Name</label>
+                        <label for="productName" class="form-label">Product Name</label>
                         <input type="text" id="productName" name="product[name]" class="form-control" value="<%= product.name %>" required>
+                        <div class="invalid-feedback">
+                            Please enter a product name.
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="productPrice">Price</label>
+                        <label for="productPrice" class="form-label">Price</label>
                         <input type="number" id="productPrice" name="product[price]" class="form-control" value="<%= product.price %>" required>
+                        <div class="invalid-feedback">
+                            Please enter a price.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -22,8 +28,11 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="productStock">Stock Quantity</label>
+                        <label for="productStock" class="form-label">Stock Quantity</label>
                         <input type="number" id="productStock" name="product[stock]" class="form-control" value="<%= product.stock %>" required>
+                        <div class="invalid-feedback">
+                            Please enter a stock quantity.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31,8 +40,11 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="productDescription">Product Description</label>
+                        <label for="productDescription" class="form-label">Product Description</label>
                         <textarea id="productDescription" name="product[description]" class="form-control" rows="4" required><%= product.description %></textarea>
+                        <div class="invalid-feedback">
+                            Please enter a product description.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,12 +52,15 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="productImage">Product Image URL</label>
+                        <label for="productImage" class="form-label">Product Image URL</label>
                         <!-- Dynamic Image Preview -->
                         <img id="imagePreview" src="<%= product.image_url %>" alt="Product Preview" class="preview-image">
                         <img id="placeholderImage" src="https://via.placeholder.com/150" alt="Placeholder" class="placeholder-image" style="display: none;">
                         <input type="text" id="productImage" name="product[image_url]" class="form-control" value="<%= product.image_url %>" required 
                                oninput="updatePreview()">
+                               <div class="invalid-feedback">
+                            Please enter a product image URL.
+                            </div>
                     </div>
                 </div>
             </div>

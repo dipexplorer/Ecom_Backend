@@ -24,6 +24,10 @@ app.use(methodOverride("_method"));
 const ejsMate = require("ejs-Mate");
 app.engine('ejs',ejsMate);
 
+// error handling
+const warpAsync = require("./utils/wrapAsync.js");
+const wrapAsync = require("./utils/wrapAsync.js");
+
 const MONGO_DB_URL = "mongodb://127.0.0.1:27017/e_commerce";
 
 main()
@@ -43,31 +47,20 @@ app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
-app.get("/products", async (req, res) => {
-    try{
+app.get("/products", wrapAsync(async (req, res) => {
         const allProducts = await Product.find({});
         // res.json(allProducts);
         // console.log(allProducts);
         res.render("products/index.ejs", {allProducts});
-    }
-    catch(err){
-        res.send(err.message);
-    }
-});
+}));
 
-app.get("/products/:id", async (req, res) => {
-    try{
-        const product = await Product.findById(req.params.id);
-        if(!product) return res.status(404).send("Product not found");
-        res.render("products/show.ejs", {product});
-    }
-    catch(err){
-        res.send(err.message);
-    }
-});
+app.get("/products/:id", wrapAsync(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    if(!product) return res.status(404).send("Product not found");
+    res.render("products/show.ejs", {product});
+}));
 
 //admin
-
 app.get("/adminDashboard",async (req, res)=>{
     const allProducts = await Product.find({});
     res.render("products/adminDashboard.ejs",{product : allProducts});
@@ -78,86 +71,40 @@ app.get("/adminDashboard/addProduct", (req, res) => {
     res.render("products/new.ejs");
 });
 
-app.get("/adminDashboard/:id", async (req, res)=>{
-    try{
-        const product = await Product.findById(req.params.id);
-        if(!product) return res.status(404).send("Product not found");
-        res.render("products/admin_view.ejs", {product});
-    }
-    catch(err){
-        res.send(err.message);
-    }
-});
+app.get("/adminDashboard/:id", wrapAsync(async (req, res)=>{
+    const product = await Product.findById(req.params.id);
+    if(!product) return res.status(404).send("Product not found");
+    res.render("products/admin_view.ejs", {product});
 
+}));
 
+app.post("/adminDashboard/addProduct", wrapAsync(async (req, res) => {
+    let product = req.body.product;
+    // console.log(product);
+    const newProduct = new Product(product);
+    newProduct.save();
+    res.redirect("/adminDashboard");
+}));
 
-app.post("/adminDashboard/addProduct", async (req, res) => {
-    try{
-        let product = req.body.product;
-        // console.log(product);
-        const newProduct = new Product(product);
-        newProduct.save();
-        res.redirect("/adminDashboard");
-    }
-    catch(err){
-        res.send(err.message);
-    }
-});
-
-app.get("/adminDashboard/:id/update", async (req, res) => {
-    try{
-        const product = await Product.findById(req.params.id);
-        if(!product) return res.status(404).send("Product not found");
-        res.render("products/update.ejs", {product});
-    }
-    catch(err){
-        res.send(err.message);
-    }
-});
+app.get("/adminDashboard/:id/update", wrapAsync(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    if(!product) return res.status(404).send("Product not found");
+    res.render("products/update.ejs", {product});
+}));
 
 // update the product
-
-app.put("/adminDashboard/:id/update", async (req, res) => {
-    try{
-        let product = req.body.product;
-        await Product.findByIdAndUpdate(req.params.id, product);
-        res.redirect(`/adminDashboard/${req.params.id}`);
-    }
-    catch(err){
-        res.send(err.message);
-    }
-});
+app.put("/adminDashboard/:id/update", wrapAsync(async (req, res) => {
+    let product = req.body.product;
+    await Product.findByIdAndUpdate(req.params.id, product);
+    res.redirect(`/adminDashboard/${req.params.id}`);
+}));
 
 //delete product
-app.delete("/adminDashboard/:id", async (req, res) => {
-    try{
-        await Product.findByIdAndDelete(req.params.id);
-        res.redirect("/adminDashboard");
-    }
-    catch(err){
-        res.send(err.message);
-    }
-});
+app.delete("/adminDashboard/:id", wrapAsync(async (req, res) => {
+    await Product.findByIdAndDelete(req.params.id);
+    res.redirect("/adminDashboard");
 
-// // User Schema
-// app.get("/testSchema",async (req, res) => {
-//     try{
-//         let sampleProduct = new Product({
-//             name: "Sample Product",
-//             description: "This is a sample product for testing purposes.",
-//             price: 99.99,
-//             stock: 100,
-//             image_url: "ass"
-//         });
-//         await sampleProduct.save();
-//         console.log("Sample Product saved");
-//         res.send("Sample Product created successfully");
-//     }
-//     catch(err){
-//         res.send( err.message );
-//     }
-// });
-
+}));
 
 // Start server
 const PORT = process.env.PORT || 8080;
