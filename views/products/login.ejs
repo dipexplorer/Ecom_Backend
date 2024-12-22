@@ -1,0 +1,82 @@
+<% layout("/layouts/boilerplate") -%>
+
+    <div class="frm_container row">
+        <div class="col-md-4 offset-md-4 frm_box">
+            <div class="toggle">
+                <button id="login-toggle" class="active">Login</button>
+                <button id="register-toggle">Register</button>
+            </div>
+
+            <!-- LOGIN FORM-->
+            <form id="login-form" class="form needs-validation" novalidate>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="input-group form-group">
+                            <label for="login-email" class="form-label">Email</label>
+                            <input type="email" id="login-email" placeholder="Enter your email"
+                                required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="input-group form-group">
+                            <label for="login-password" class="form-label">Password</label>
+                            <input type="password" id="login-password" placeholder="Enter your password"
+                                 required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                        <button type="submit" class="btn">Login</button>
+                </div>
+                <!-- <button type="submit" class="btn">Login</button> -->
+                <p class="small-text">Don't have an account? <span id="switch-to-register">Register</span></p>
+            </form>
+
+            <!-- REGISTRATION FORM -->
+            <form id="register-form" class="form hidden">
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="input-group form-group">
+                            <label for="register-name" class="form-label">Name</label>
+                            <input type="password" id="register-name" placeholder="Enter your name"
+                                required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="input-group form-group">
+                            <label for="register-email" class="form-label">Email</label>
+                            <input type="email" id="register-email" placeholder="Enter your email"
+                                required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group form-group">
+                            <label for="register-password" class="form-label">Password</label>
+                            <input type="password" id="register-password" placeholder="Enter your password"
+                               required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group form-group">
+                            <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                            <input type="password" id="register-confirm-password" placeholder="Confirm your password"
+                                 required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <button type="submit" class="btn">Register</button>
+                </div>
+                <p class="small-text">Already have an account? <span id="switch-to-login">Login</span></p>
+            </form>
+        </div>
+    </div>
