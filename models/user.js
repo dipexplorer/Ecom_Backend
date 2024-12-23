@@ -22,6 +22,10 @@ const userSchema = new Schema({
     type: Boolean,
     default: false, // Default is false for regular users
   },
+  // Field for storing user's orders
+  orders: [
+    { type: Schema.Types.ObjectId, ref: "Order" },
+  ],
 });
 
 userSchema.plugin(passportLocalMongoose);

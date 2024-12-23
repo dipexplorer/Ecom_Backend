@@ -1,8 +1,16 @@
 <header class="navbar">
-    <a class="navbar-brand logo" href="/products">ShopEasy</a>
     <nav>
-        <a href="/products">Home</a>
+        <a class="navbar-brand logo" href="/products">ShopEasy</a>
+        <!-- <a href="/products">Home</a> -->
         <a href="/products">Products</a>
-        <a href="#" id="cart-link">Cart (0)</a>
     </nav>
+    <div class="auth-links">
+        <a href="#" id="cart-link">Cart (0)</a>
+        <% if (currentUser) { %>
+            <a href="/profile">Profile</a> <!-- Link to the user profile page -->
+            <a href="/logout">Logout</a>
+        <% } else { %>
+            <a href="/login">Login</a>
+        <% } %>
+    </div>
 </header>

@@ -10,9 +10,15 @@ const ejsMate = require("ejs-Mate");
 // error handling
 const wrapAsync = require("./utils/wrapAsync.js");
 const expressError = require("./utils/expressError.js");
-const listing = require("./routes/listing.js");
 
-const admin = require("./routes/admin_panel.js");
+//for ejs rendering
+const listingRouter = require("./routes/listing.js");
+const adminRouter = require("./routes/admin_panel.js");
+const userRouter = require("./routes/user.js");
+
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
 
 
 //SESSIONS MANAGEMENt
@@ -41,9 +47,22 @@ app.use(session(sessionOptions));
 //use flash
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(User.authenticate()));
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currentUser = req.user; //currentUser is available in all templates
+    // console.log(req.user);
     next();
 });
 
@@ -76,16 +95,9 @@ async function main(){
 };
 
 // ROUTES
-app.use("/products",listing);
-app.use("/adminDashboard",admin);
-
-app.get('/login', (req, res) => {
-    res.render('./products/login.ejs');
-});
-
-app.get('/register', (req, res) => {
-    res.render('./products/register.ejs');
-});
+app.use("/products",listingRouter);
+app.use("/adminDashboard",adminRouter);
+app.use("/",userRouter);
 
 // (err, req, res, next) — with the error object (err) being the first parameter.
 app.use((err, req, res, next) => {
