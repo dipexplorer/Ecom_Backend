@@ -1,135 +1,149 @@
 <% layout("/layouts/boilerplate") -%>
-<style>/* Form Container */
-    .form-container {
-        width: 80%;
-        max-width: 900px;
-        margin: 50px auto;
-        padding: 20px;
-        background-color: white;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-    
-    .form-title {
-        text-align: center;
-        font-size: 2rem;
-        color: #333;
-        margin-bottom: 30px;
-    }
-    .btns{
-        display: flex !important;
-        justify-content: center;
-        flex-direction: row !important;;
-    }
-    .btns .btn{
-        width: 10rem;
-        margin-right: 3rem;
-    }
+    <style>
+        /* Form Container */
+        .form-container {
+            width: 80%;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .btns {
+            display: flex !important;
+            justify-content: center;
+            flex-direction: row !important;
+            ;
+        }
+
+        .btns .btn {
+            width: 10rem;
+            margin-right: 3rem;
+        }
     </style>
-<!-- Form Section -->
-<div class="form-container">
-    <h1 class="form-title">Update User Details</h1>
-    <form action="/users/update" method="POST" class="needs-validation" novalidate>
+    <!-- Form Section -->
+    <div class="form-container">
+        <h1 class="form-title">Update User Details</h1>
+        <form action="/profile/edit/<%= user._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
 
-        <!-- Name and Email -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="userName" class="form-label">Name</label>
-                    <input type="text" id="userName" name="name" class="form-control" value="<%= user.name %>" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Please enter your name.
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="userEmail" class="form-label">Email</label>
-                    <input type="email" id="userEmail" name="email" class="form-control" value="<%= user.email %>" readonly>
-                    <div class="valid-feedback">
-                        Email is correct!
+            <!-- Name and Email -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="userName" class="form-label">Name</label>
+                        <input type="text" id="userName" name="user[username]" class="form-control"
+                            value="<%= user.username %>" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter your name.
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Address -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="street" class="form-label">Street</label>
-                    <input type="text" id="street" name="address[street]" class="form-control" value="<%= user.address.street %>">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="city" class="form-label">City</label>
-                    <input type="text" id="city" name="address[city]" class="form-control" value="<%= user.address.city %>">
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="state" class="form-label">State</label>
-                    <input type="text" id="state" name="address[state]" class="form-control" value="<%= user.address.state %>">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="postalCode" class="form-label">Postal Code</label>
-                    <input type="text" id="postalCode" name="address[postalCode]" class="form-control" value="<%= user.address.postalCode %>">
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="country" class="form-label">Country</label>
-                    <input type="text" id="country" name="address[country]" class="form-control" value="<%= user.address.country %>">
-                </div>
-            </div>
-        </div>
-
-        <!-- Contact Number -->
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="contactNumber" class="form-label">Contact Number</label>
-                    <input type="text" id="contactNumber" name="contactNumber" class="form-control" value="<%= user.contactNumber %>" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Please enter a valid contact number.
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="userEmail" class="form-label">Email</label>
+                        <input type="email" id="userEmail" name="user[email]" class="form-control"
+                            value="<%= user.email %>" readonly>
+                        <div class="valid-feedback">
+                            Email is correct!
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Admin Checkbox (if applicable) -->
-        <% if (user.isAdmin) { %>
+            <!-- Address -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="street" class="form-label">Street</label>
+                        <input type="text" id="street" name="user[address][street]" class="form-control"
+                            value="<%= user.address.street %>">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" id="city" name="user[address][city]" class="form-control"
+                            value="<%= user.address.city %>">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" id="state" name="user[address][state]" class="form-control"
+                            value="<%= user.address.state %>">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input type="text" id="postalCode" name="user[address][postalCode]" class="form-control"
+                            value="<%= user.address.postalCode %>">
+                    </div>
+                </div>
+            </div>
+
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <div class="form-group form-check">
-                        <input type="checkbox" id="isAdmin" name="isAdmin" class="form-check-input" <%= user.isAdmin ? "checked" : "" %>>
-                        <label for="isAdmin" class="form-check-label">Is Admin</label>
+                    <div class="form-group">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" id="country" name="user[address][country]" class="form-control"
+                            value="<%= user.address.country %>">
                     </div>
                 </div>
             </div>
-        <% } %>
 
-        <!-- Submit and Cancel Buttons -->
-        <div class="btns">
-                <button type="submit" class="btn btn-outline-primary">Update</button>
-                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='/profile'">Cancel</button>
-        </div>
+            <!-- Contact Number -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="contactNumber" class="form-label">Contact Number</label>
+                        <input type="text" id="contactNumber" name="user[contactNumber]" class="form-control"
+                            value="<%= user.contactNumber %>" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter a valid contact number.
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    </form>
-</div>
+            <!-- Admin Checkbox (if applicable) -->
+            <% if (user.isAdmin) { %>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="form-group form-check">
+                            <input type="checkbox" id="isAdmin" name="isAdmin" class="form-check-input" <%=user.isAdmin
+                                ? "checked" : "" %>>
+                            <label for="isAdmin" class="form-check-label">Is Admin</label>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+
+                    <!-- Submit and Cancel Buttons -->
+                    <div class="btns">
+                        <button type="submit" class="btn btn-outline-primary">Update</button>
+                        <button type="button" class="btn btn-outline-danger"
+                            onclick="window.location.href='/profile'">Cancel</button>
+                    </div>
+
+        </form>
+    </div>

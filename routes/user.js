@@ -68,9 +68,42 @@ router.get("/profile", isLoggedIn, wrapAsync(async (req, res) => {
 }));
 
 // update form
-
 router.get("/profile/edit", isLoggedIn, wrapAsync(async (req, res) => {
   res.render("products/editProfile.ejs", { user: req.user });
+}));
+
+//update user data
+
+router.put("/profile/edit/:id", isLoggedIn, wrapAsync(async (req, res, next) => {
+  if(!req.body.user){
+    throw new expressError(400, "Send valid data");
+  }
+  let user = req.body.user;
+  // console.log(user);
+  await User.findByIdAndUpdate(req.user._id, user);
+  //flash message
+  req.flash("success", "Profile updated successfully!");
+  res.redirect("/profile");
+}));
+
+// delete user
+router.delete("/profile/:id", isLoggedIn, wrapAsync(async (req, res, next) => {
+  await User.findByIdAndDelete(req.params.id);
+  req.flash("success", "Account deleted successfully!");
+  req.logout((err)=>{
+    if(err){
+      return next(err);
+    }
+    req.flash("success","Logged Out Successfully");
+    res.redirect("/login");
+  })
+}));
+
+// view orders
+
+router.get("/orders", isLoggedIn, wrapAsync(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id }).populate("product");
+  res.render("products/orders.ejs", { orders });
 }));
 
 module.exports = router;
