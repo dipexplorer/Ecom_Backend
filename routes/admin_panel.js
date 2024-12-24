@@ -5,6 +5,9 @@ const { productSchema } = require("../schema.js");
 const expressError = require("../utils/expressError.js");
 const { isLoggedIn, isAdmin, validateProduct } = require("../middleware.js");
 
+// oder model
+const Order = require("../models/order.js");
+
 // error handling
 const wrapAsync = require("../utils/wrapAsync.js");
 
@@ -19,6 +22,39 @@ router.get("/addProduct", isLoggedIn, isAdmin, (req, res) => {
   res.render("products/new.ejs");
 });
 
+//view all orders
+
+router.get(
+  "/orders",
+  isLoggedIn,
+  isAdmin,
+  wrapAsync(async (req, res) => {
+    // Fetch orders along with the associated user details
+    const orders = await Order.find({}).populate("user").exec();
+    // console.log(orders);
+    res.render("products/admin_orders.ejs", { orders });
+  })
+);
+
+//update status
+
+router.put(
+  "/orders/:id/status",
+  isLoggedIn,
+  isAdmin,
+  wrapAsync(async (req, res) => {
+    const { id } = req.params; // Get the order ID from the URL
+    const { status } = req.body; // Get the new status from the form
+
+    // Find the order by ID and update the status
+    const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
+
+    // After updating, redirect to the orders page
+    res.redirect("/adminDashboard/orders");
+  })
+);
+
+//view product
 router.get(
   "/:id",
   isLoggedIn,

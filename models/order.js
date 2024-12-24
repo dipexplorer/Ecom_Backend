@@ -13,13 +13,13 @@ const orderSchema = new Schema({
       quantity: { type: Number, required: true },
     },
   ],
-  totalAmount: { type: Number, required: true },
+  totalAmount: { type: Number, required: true, min: 1 },
   status: {
     type: String,
-    enum: ["Pending", "Completed", "Cancelled"],
+    enum: ["Pending", 'Shipped', "Delivered", "Cancelled"],
     default: "Pending",
   },
-  paymentMethod : { type: String, required: true, default: "COD"},
+  paymentMethod : { type: String, default: "COD"},
   createdAt: { type: Date, default: Date.now },
 });
 

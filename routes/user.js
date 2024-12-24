@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user.js");
 const expressError = require("../utils/expressError.js");
+const Order = require("../models/order.js");
+const Product = require("../models/products.js");
 
 //passport setup
 const passport = require("passport");
@@ -100,10 +102,26 @@ router.delete("/profile/:id", isLoggedIn, wrapAsync(async (req, res, next) => {
 }));
 
 // view orders
+router.get("/profile/orders", isLoggedIn, wrapAsync(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id })
+    .populate({
+      path: "products.product", // Populate the `product` field within the `products` array
+      model: "Product", // Explicitly reference the `Product` model
+    })
+    .exec();
 
-router.get("/orders", isLoggedIn, wrapAsync(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id }).populate("product");
+  console.log(orders);
   res.render("products/orders.ejs", { orders });
+}));
+
+
+//order cancle
+
+router.put("/profile/orders/:id", isLoggedIn, wrapAsync(async (req, res, next) => {
+  const order = await Order.findByIdAndUpdate(req.params.id, { status: "Cancelled" });
+  //flash message
+  req.flash("success", "Order canceled successfully!");
+  res.redirect("/profile/orders");
 }));
 
 module.exports = router;

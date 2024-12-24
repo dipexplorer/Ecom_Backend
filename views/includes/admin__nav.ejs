@@ -3,14 +3,23 @@
     <div class="left">
         <a class="navbar-brand logo" style="text-decoration: none;" href="/products">ShopEasy</a>
     </div>
-    <div class="add-product"><a href="/adminDashboard/addProduct">Add New Product</a>
+    <div class="add-product">
+        <a href="/adminDashboard/addProduct">Add New Product</a>
+    </div>
+    <!-- dashboard -->
+     <div class="dashboard">
+        <a href="/adminDashboard"><b>View Products</b></a>
+    </div>
+    <!-- orders -->
+     <div class="orders">
+        <a href="/adminDashboard/orders"><b>Manage Orders</b></a>
     </div>
 
     <div class="auth-links">
         <% if (currentUser) { %>
-            <a href="/logout">Logout</a>
-        <% } else { %>
-            <a href="/login">Login</a>
-        <% } %>
+            <a href="/logout"><b>Logout</b></a>
+            <% } else { %>
+                <a href="/login"><b>Login</b></a>
+                <% } %>
     </div>
 </nav>

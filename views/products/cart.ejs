@@ -1,0 +1,198 @@
+<% layout("/layouts/boilerplate") -%>
+
+<div class="cart-container">
+  <h1 class="cart-heading">Your Cart</h1>
+
+  <% if (cart && cart.items.length > 0) { %>
+    <ul class="cart-list">
+      <% cart.items.forEach(item => { %>
+        <li class="cart-item">
+          <div class="cart-item-info">
+            <img src="<%= item.product.image_url %>" alt="<%= item.product.name %>" class="cart-item-image">
+            <div class="cart-item-details">
+              <span class="cart-item-name"><%= item.product.name %></span>
+              <span class="cart-item-price">$<%= item.product.price %></span>
+              <form action="/cart/update/<%= item.product._id %>?_method=PUT" method="POST" class="cart-update-form">
+                <label for="quantity-<%= item.product._id %>">Quantity:</label>
+                <input type="number" id="quantity-<%= item.product._id %>" name="quantity" value="<%= item.quantity %>" min="1">
+                <button type="submit" class="btn-update">Update</button>
+              </form>
+            </div>
+          </div>
+          <form action="/cart/remove/<%= item.product._id %>?_method=DELETE" method="POST" class="cart-item-remove">
+            <button type="submit" class="btn-remove">Remove</button>
+          </form>
+        </li>
+      <% }); %>
+    </ul>
+    <div class="cart-summary">
+      <h2>Order Summary</h2>
+      <p>Total Items: <%= cart.items.length %></p>
+      <p>Total Price: $<%= cart.items.reduce((total, item) => total + item.product.price * item.quantity, 0) %></p>
+      <form action="/cart/checkout" method="POST">
+        <button type="submit" class="btn-checkout">Proceed to Checkout</button>
+      </form>
+    </div>
+  <% } else { %>
+    <p class="cart-empty">Your cart is empty. Start shopping to add items!</p>
+  <% } %>
+</div>
+<style>
+    
+    /* Cart Container */
+    .cart-container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      padding: 20px;
+    }
+    
+    /* Heading */
+    .cart-heading {
+      font-size: 2.5rem;
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #dcdcdc;
+      padding-bottom: 10px;
+    }
+    
+    /* Cart List */
+    .cart-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .cart-item-info {
+      display: flex;
+      align-items: center;
+    }
+    
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 15px;
+    }
+    
+    .cart-item-details {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .cart-item-name {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #2c3e50;
+    }
+    
+    .cart-item-price {
+      font-size: 1rem;
+      color: #27ae60;
+      margin: 5px 0;
+    }
+    
+    /* Update Quantity Form */
+    .cart-update-form {
+      display: flex;
+      align-items: center;
+    }
+    
+    .cart-update-form label {
+      margin-right: 10px;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+    }
+    
+    .cart-update-form input {
+      width: 50px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+      margin-right: 10px;
+    }
+    
+    .btn-update {
+      background-color: #383838;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .btn-update:hover {
+      background-color: #272727;
+    }
+    
+    /* Remove Button */
+    .btn-remove {
+      background-color: #b41705;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .btn-remove:hover {
+      background-color: #c0392b;
+    }
+    
+    /* Cart Summary */
+    .cart-summary {
+      margin-top: 20px;
+      text-align: center;
+      background: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    
+    .cart-summary h2 {
+      font-size: 1.5rem;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    
+    .cart-summary p {
+      font-size: 1rem;
+      color: #7f8c8d;
+    }
+    
+    .btn-checkout {
+      background-color: #27ae60;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    
+    .btn-checkout:hover {
+      background-color: #2ecc71;
+    }
+    
+    /* Empty Cart Message */
+    .cart-empty {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #7f8c8d;
+      margin: 30px 0;
+    }
+    </style>

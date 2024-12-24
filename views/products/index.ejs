@@ -19,7 +19,10 @@
                         <h3><a href="/products/<%= product._id %>"><%= product.name %></a></h3>
                         <p>Price: $<%= product.price %></p>
                         <p>Stock: <%= product.stock %> left</p>
-                        <button class="btn-add-to-cart">Add to Cart</button>
+                        <form action="/cart/add" method="POST">
+                            <input type="hidden" name="productId" value="<%= product._id %>">
+                            <button class="btn-add-to-cart">Add to Cart</button>
+                          </form>
                     </div>
                 </div>
             <% } %>

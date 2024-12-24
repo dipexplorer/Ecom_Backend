@@ -1,0 +1,139 @@
+<% layout('/layouts/admin_boiler') -%>
+
+<body>
+    <main class="admin-orders-container">
+        <h1>Admin Panel - Manage Orders</h1>
+
+        <% if (orders.length > 0) { %>
+            <section class="orders-list">
+                <% orders.forEach(order => { %>
+                    <div class="row order-item mb-4 p-4 rounded shadow-sm">
+                        <!-- Order ID Column -->
+                        <div class="col-md-3">
+                            <strong>Order ID</strong>
+                            <p><%= order._id %></p>
+                        </div>
+                        
+                        <!-- Customer Column -->
+                        <div class="col-md-3">
+                            <strong>Customer</strong>
+                            <p><%= order.user.username || 'Guest' %></p>
+                        </div>
+                        
+                        <!-- Order Date Column -->
+                        <div class="col-md-2">
+                            <strong>Order Date</strong>
+                            <p><%= new Date(order.createdAt).toLocaleDateString() %></p>
+                        </div>
+                        
+                        <!-- Total Amount Column -->
+                        <div class="col-md-2">
+                            <strong>Total Amount</strong>
+                            <p>$<%= order.totalAmount %></p>
+                        </div>
+                        
+                        <!-- Items Column -->
+                        <div class="col-md-2">
+                            <strong>Items</strong>
+                            <ul>
+                                <% order.products.forEach(item => { %>
+                                    <li><%= item.product.name %> (x<%= item.quantity %>)</li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                        
+                        <!-- Status Column -->
+                        <div class="col-md-2">
+                            <strong>Status</strong>
+                            <% if (order.status === 'Delivered' || order.status === 'Cancelled') { %>
+                                <!-- View-only dropdown when status is Delivered or Cancelled -->
+                                <b class="btn"><%= order.status %></b>
+                            <% } else { %>
+                                <!-- Editable dropdown when status is not Delivered or Cancelled -->
+                                <form action="/adminDashboard/orders/<%= order._id %>/status?_method=PUT" method="POST">
+                                    <select name="status" class="form-select mb-2">
+                                        <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                        <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                        <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                        <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-warning">Update</button>
+                                </form>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </section>
+        <% } else { %>
+            <p>No orders found.</p>
+        <% } %>
+    </main>
+
+    <style>
+        .admin-orders-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase; /* Adds a professional touch */
+        }
+
+        .order-item {
+            background-color: #333; /* Dark grey for rows */
+            color: #e1e1e1; /* Light grey text */
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-item .col-md-3 {
+            color: #e1e1e1; /* Ensure the text is light */
+        }
+
+        .order-item .col-md-3 strong {
+            color: #d4af37; /* Gold for the headings */
+        }
+
+        .order-item ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .order-item ul li {
+            font-size: 1rem;
+            color: #e1e1e1; /* Light grey text for item list */
+        }
+
+        .form-select, .btn {
+            font-size: 1rem;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background-color: #3a3a3a; /* Dark background for input fields */
+            color: #e1e1e1;
+        }
+
+        .form-select:hover, .btn:hover {
+            background-color: #5a5a5a; /* Slightly lighter grey on hover */
+            border-color: #d4af37; /* Gold border for hover effect */
+        }
+
+        .btn {
+            background-color: #d4af37; /* Gold for the button */
+            color: white;
+            border: none;
+        }
+
+        .btn:hover {
+            background-color: #b38b2a; /* Darker gold on hover */
+        }
+    </style>
+</body>

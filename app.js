@@ -10,11 +10,13 @@ const ejsMate = require("ejs-Mate");
 // error handling
 const wrapAsync = require("./utils/wrapAsync.js");
 const expressError = require("./utils/expressError.js");
+const Cart = require("./models/cart.js");
 
 //for ejs rendering
 const listingRouter = require("./routes/listing.js");
 const adminRouter = require("./routes/admin_panel.js");
 const userRouter = require("./routes/user.js");
+const cartRoutes = require("./routes/cart.js");
 
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -58,10 +60,16 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currentUser = req.user; //currentUser is available in all templates
+    if (req.user) {
+        const cart = await Cart.findOne({ user: req.user._id });
+        res.locals.cartCount = cart ? cart.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
+      } else {
+        res.locals.cartCount = 0;
+      }
     // console.log(req.user);
     next();
 });
@@ -98,6 +106,7 @@ async function main(){
 app.use("/products",listingRouter);
 app.use("/adminDashboard",adminRouter);
 app.use("/",userRouter);
+app.use("/cart", cartRoutes);
 
 // (err, req, res, next) — with the error object (err) being the first parameter.
 app.use((err, req, res, next) => {
@@ -109,9 +118,9 @@ app.use((err, req, res, next) => {
 
 //page not found
 app.all("*", (req, res, next) => {
-    const err = new expressError(404, "Page not found");
+    res.render("products/nopage.ejs");
     next(err);
-  });
+ });
 
 // Start server
 const PORT = process.env.PORT || 8080;
