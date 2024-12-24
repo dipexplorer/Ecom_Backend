@@ -1,8 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const Cart = require("../models/cart");
+const Cart = require("../models/cart.js");
 const Product = require("../models/products.js");
+const User = require("../models/user.js");
+const Order = require("../models/order.js");
 const { isLoggedIn } = require("../middleware");
+const expressError = require("../utils/expressError.js");
+
+// error handling
+const wrapAsync = require("../utils/wrapAsync.js");
+
 
 router.get("/", isLoggedIn, async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id }).populate(
@@ -104,5 +111,68 @@ router.delete("/remove/:id", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+
+
+// Checkout route - Place order for all items in the cart
+router.post("/checkout", isLoggedIn, wrapAsync(async (req, res, next) => {
+    const user = req.user;
+    if (!user) return next(new ExpressError("User not found", 404));
+  
+    // Retrieve the user from the database
+    const validUser = await User.findById(user._id);
+  
+    // Check if the user has a valid address
+    const address = validUser.address || {};
+    const requiredFields = ["street", "city", "state", "postalCode", "country"];
+    const isAddressComplete = requiredFields.every(
+      (field) => address[field] && address[field].trim() !== ""
+    );
+  
+    if (!isAddressComplete) {
+      req.flash("error", "Please update your address before placing an order.");
+      return res.redirect("/profile/edit");
+    }
+  
+    // Retrieve the cart
+    const cart = await Cart.findOne({ user: user._id }).populate("items.product");
+    if (!cart || cart.items.length === 0) {
+      req.flash("error", "Your cart is empty.");
+      return res.redirect("/cart");
+    }
+  
+    // Create the order
+    let totalAmount = 0;
+    const products = cart.items.map(item => {
+      totalAmount += item.product.price * item.quantity;
+      return {
+        product: item.product._id,
+        quantity: item.quantity,
+      };
+    });
+  
+    // Create the order
+    const order = new Order({
+      user: user._id,
+      products,
+      totalAmount,
+      shippingAddress: address,
+    });
+  
+    // Save the order to the database
+    const savedOrder = await order.save();
+  
+    // Clear the cart
+    cart.items = [];
+    await cart.save();
+  
+    // Link the order to the user's profile
+    validUser.orders = validUser.orders || [];
+    validUser.orders.push(savedOrder._id);
+    await validUser.save();
+  
+    req.flash("success", "Order placed successfully!");
+    res.redirect("/orders");
+  }));
+
 
 module.exports = router;
