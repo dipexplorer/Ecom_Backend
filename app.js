@@ -113,18 +113,19 @@ app.use("/",userRouter);
 app.use("/cart", cartRoutes);
 
 // (err, req, res, next) — with the error object (err) being the first parameter.
+// General error-handling middleware
+// Middleware for handling errors
 app.use((err, req, res, next) => {
-    const { statusCode = 500, message = "Something went wrong" } = err;
-    // res.status(statusCode).send(message);
-    console.log(err);
-    res.render("error.ejs");
+    const status = err.status || 500;
+    const msg = err.message || 'Internal Server Error';
+    res.status(status).render('products/error', { msg, status });
 });
 
-//page not found
-app.all("*", (err, req, res, next) => {
-    res.render("products/nopage.ejs");
-    next(err);
- });
+
+// Catch-all route for undefined routes (404 error handler)
+app.use((req, res) => {
+    res.status(404).render("products/nopage.ejs");
+});
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
