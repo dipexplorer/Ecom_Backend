@@ -22,7 +22,8 @@ module.exports.saveRedirectUrl = (req, res, next) => {
 
 //ISADMIN
 module.exports.isAdmin = (req, res, next) => {
-    if (!req.user.isAdmin) {
+    if (req.user.isAdmin) {
+        // console.log(req.user.isAdmin);
         next();
     } else {
         req.flash("error", "You must be an admin to access this page");

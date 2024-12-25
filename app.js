@@ -1,3 +1,6 @@
+if(process.env.NODE_ENV!="production") { //not to deploy .env file while uploading to git
+    require('dotenv').config();
+}
 const express=require("express");
 const app = express();
 const mongoose=require("mongoose");
@@ -30,7 +33,7 @@ const session= require("express-session");
 const flash = require("connect-flash");
 
 const sessionOptions ={
-    secret: "secretkey",
+    secret: process.env.SESSION_SECRET || "secretkey",
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -39,6 +42,11 @@ const sessionOptions ={
         httpOnly: true,
     }
 };
+
+const MONGO_DB_URL = process.env.DATABASE_URL;
+// Use environment variables
+const PORT = process.env.PORT || 3000;
+
 
 // Test API
 app.get('/', (req, res) => {
@@ -63,10 +71,12 @@ passport.deserializeUser(User.deserializeUser());
 app.use(async (req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currentUser = req.user; //currentUser is available in all templates
+    res.locals.currentUser = req.user || null; //currentUser is available in all templates
     if (req.user) {
         const cart = await Cart.findOne({ user: req.user._id });
-        res.locals.cartCount = cart ? cart.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
+        res.locals.cartCount = cart 
+          ? cart.items.reduce((sum, item) => sum + item.quantity, 0) 
+          : 0;
       } else {
         res.locals.cartCount = 0;
       }
@@ -88,19 +98,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 app.engine('ejs',ejsMate);
 
-const MONGO_DB_URL = "mongodb://127.0.0.1:27017/e_commerce";
-
-main()
-.then(()=>{
-    console.log("Connected to MongoDB");
-})
-.catch(err=>{
-    console.error("Failed to connect to MongoDB", err);
-});
 
 async function main(){
     await mongoose.connect(MONGO_DB_URL);
+    console.log("Connected to MongoDB");
 };
+
+main().catch(err => console.log(err));
 
 // ROUTES
 app.use("/products",listingRouter);
@@ -113,15 +117,14 @@ app.use((err, req, res, next) => {
     const { statusCode = 500, message = "Something went wrong" } = err;
     // res.status(statusCode).send(message);
     console.log(err);
-    res.render("error.ejs", {err});
+    res.render("error.ejs");
 });
 
 //page not found
-app.all("*", (req, res, next) => {
+app.all("*", (err, req, res, next) => {
     res.render("products/nopage.ejs");
     next(err);
  });
 
 // Start server
-const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -171,7 +171,7 @@ router.post("/checkout", isLoggedIn, wrapAsync(async (req, res, next) => {
     await validUser.save();
   
     req.flash("success", "Order placed successfully!");
-    res.redirect("/orders");
+    res.redirect("/profile/orders");
   }));
 
 

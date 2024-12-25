@@ -1,15 +1,25 @@
 <header class="navbar">
     <nav>
         <a class="navbar-brand logo" href="/products">ShopEasy</a>
-        <!-- <a href="/products">Home</a> -->
         <a href="/products">Products</a>
+
+        <% if (currentUser && currentUser.isAdmin) { %>
+            <a href="/adminDashboard">Admin Dashboard</a>
+        <% } %>
     </nav>
+
     <div class="auth-links">
-        <a href="/cart" id="cart-link">Cart <b class="badge rounded-pill text-bg-success"><%= cartCount %></b></a>
         <% if (currentUser) { %>
-            <a href="/profile">Profile</a> <!-- Link to the user profile page -->
+            <!-- Show cart and profile links only for non-admin users -->
+            <% if (!currentUser.isAdmin) { %>
+                <a href="/cart" id="cart-link">
+                    Cart <b class="badge rounded-pill text-bg-success"><%= cartCount || 0 %></b>
+                </a>
+                <a href="/profile">Profile</a>
+            <% } %>
             <a href="/logout">Logout</a>
         <% } else { %>
+            <!-- Show login link for guests -->
             <a href="/login">Login</a>
         <% } %>
     </div>

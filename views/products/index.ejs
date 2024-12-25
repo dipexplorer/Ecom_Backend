@@ -3,9 +3,23 @@
 <body>
     <div class="hero">
         <div class="hero-content">
-            <h1>Welcome to ShopEasy</h1>
-            <p>Your one-stop destination for amazing products and deals.</p>
-            <a href="#products" class="btn-primary">Shop Now</a>
+            <% if (!currentUser) { %>
+                <!-- For guests -->
+                <h1>Welcome to ShopEasy</h1>
+                <p>Your one-stop destination for amazing products and deals.</p>
+                <a href="#products" class="btn-primary">Shop Now</a>
+            <% } else if (!currentUser.isAdmin) { %>
+                <!-- For logged-in users (non-admin) -->
+                <h1>Welcome to ShopEasy</h1>
+                <p>Your one-stop destination for amazing products and deals.</p>
+                <a href="#products" class="btn-primary">Shop Now</a>
+            <% } else { %>
+                <!-- For admin users -->
+                <h1>Welcome Back Admin!</h1>
+                <p>Manage your products, orders, and users here.</p>
+                <a href="/adminDashboard" class="btn-primary">Dashboard</a>
+            <% } %>
+            
         </div>
     </div>
 
@@ -16,13 +30,29 @@
                 <div class="product-card">
                     <img src="<%= product.image_url %>" alt="<%= product.name %>">
                     <div class="product-card-content">
+                        <% if (currentUser.isAdmin) { %>
+                            <h3><%= product.name %></a></h3>
+                        <% } else if (currentUser && currentUser._id === product.owner._id) { %>
+                        <% }else{ %>
                         <h3><a href="/products/<%= product._id %>"><%= product.name %></a></h3>
+                        <% } %>
                         <p>Price: $<%= product.price %></p>
                         <p>Stock: <%= product.stock %> left</p>
-                        <form action="/cart/add" method="POST">
-                            <input type="hidden" name="productId" value="<%= product._id %>">
-                            <button class="btn-add-to-cart">Add to Cart</button>
-                          </form>
+                        <!-- if user is only view option available -->
+                        <% if (currentUser && currentUser.isAdmin) { %>
+                            <!-- Admin-specific view -->
+                            <a href="/adminDashboard/<%= product._id %>" class="badge text-bg-dark">View Info</a>
+                        <% } else if (currentUser) { %>
+                            <!-- Logged-in user (non-admin) -->
+                            <form action="/cart/add" method="POST">
+                                <input type="hidden" name="productId" value="<%= product._id %>">
+                                <button class="btn-primary">Add to Cart</button>
+                            </form>
+                        <% } else { %>
+                            <!-- Guest (not logged in) -->
+                            <a href="/login" class="btn-primary">Log in to Add to Cart</a>
+                        <% } %>
+                        
                     </div>
                 </div>
             <% } %>

@@ -110,7 +110,7 @@ router.get("/profile/orders", isLoggedIn, wrapAsync(async (req, res) => {
     })
     .exec();
 
-  console.log(orders);
+  // console.log(orders);
   res.render("products/orders.ejs", { orders });
 }));
 
