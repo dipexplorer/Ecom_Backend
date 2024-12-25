@@ -32,7 +32,6 @@
                     <div class="product-card-content">
                         <% if (currentUser && currentUser.isAdmin) { %>
                             <h3><%= product.name %></a></h3>
-                        <% } else if (currentUser && currentUser._id === product.owner._id) { %>
                         <% }else{ %>
                         <h3><a href="/products/<%= product._id %>"><%= product.name %></a></h3>
                         <% } %>
