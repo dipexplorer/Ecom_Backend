@@ -30,7 +30,7 @@
                 <div class="product-card">
                     <img src="<%= product.image_url %>" alt="<%= product.name %>">
                     <div class="product-card-content">
-                        <% if (currentUser.isAdmin) { %>
+                        <% if (currentUser && currentUser.isAdmin) { %>
                             <h3><%= product.name %></a></h3>
                         <% } else if (currentUser && currentUser._id === product.owner._id) { %>
                         <% }else{ %>
